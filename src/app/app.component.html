@@ -1,0 +1,45 @@
+<div class="d-flex w-100 h-100 justify-content-center align-items-center">
+    <p-table
+      #table
+      [rows]="10"
+      class="p-table"
+      [customSort]="true"
+      (sortFunction)="sortNamePokemons($event)"
+      [value]="pokemons"
+      [paginator]="true"
+      [(first)]="currentPage"
+      [pageLinks]="3"
+      [totalRecords]="totalRecords"
+    >
+      <ng-template pTemplate="caption" >
+        <div class="container mt-3">
+          <div class="row">
+            <div class="col d-flex px-0">
+              <span class="p-float-label">
+                <input type="text" pInputText [(ngModel)]="searchValue" [typeahead]="pokemons" (ngModelChange)="textSearch($event)" />
+                <label class="text-sm">Nombre</label>
+              </span>
+            </div>
+            <div class="col d-flex justify-content-end div-buttonClear">
+                <button pButton (click)="clear(table)" class="p-button-secondary p-button-text px-2"><img class="iconClear" src="../assets/icon/delete.png" width="25" height="25"></button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="th-table" pSortableColumn="name" style="width:20%">Nombre <p-sortIcon field="name"></p-sortIcon></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-pokemon>
+          <tr *ngIf="pokemon !== '\u00A0' && pokemon !== 'No se encontraron resultados.'" role="button" (click)="showDialog(pokemon)" >
+            <td class="td-table row-table-pokemons">{{pokemon}}</td>
+          </tr>
+          <tr *ngIf="pokemon === '\u00A0' || pokemon === 'No se encontraron resultados.'" >
+            <td class="td-table row-table-empty">{{pokemon}}</td>
+          </tr>
+      </ng-template>
+    </p-table>
+</div>
+
+<app-dialog *ngIf="pokemon" [pokemon]="pokemon" [visible]="dialogVisible" (visibleChange)="closeDialog($event)"></app-dialog>
